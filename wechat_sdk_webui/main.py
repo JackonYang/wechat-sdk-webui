@@ -33,7 +33,8 @@ def login(uuid):
 
 
 def load_initial_data():
-    print request.wx_init()
+    request.wx_init()
+    request.status_notify()
 
 
 def main():

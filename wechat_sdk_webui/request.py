@@ -15,6 +15,7 @@ _req = requests.Session()
 _db = {
     'pass_ticket': None,
     'base_request': None,
+    'username': None,
 }
 
 
@@ -90,4 +91,25 @@ def wx_init():
     r = _req.post(url, data=json.dumps(data))
     r.encoding = 'utf-8'
     data = r.json()
+
+    _db['username'] = data.get('User', dict()).get('UserName')
+    return data
+
+
+def status_notify():
+    pass_ticket, base_request = _db['pass_ticket'], _db['base_request']
+
+    timestamp = utils.get_timestamp()
+    url = 'https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxstatusnotify?r=%s&lang=en_US&pass_ticket=%s' % (timestamp, pass_ticket)
+    data = json.dumps({
+        'BaseRequest': base_request,
+        "Code": 3,
+        "FromUserName": _db['username'],
+        "ToUserName": _db['username'],
+        "ClientMsgId": timestamp,
+    })
+    r = _req.post(url, data=data)
+    r.encoding = 'utf-8'
+    data = r.json()
+
     return data
