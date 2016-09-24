@@ -43,3 +43,19 @@ def get_qrcode(uuid):
     url = 'https://login.weixin.qq.com/qrcode/%s' % uuid
     r = _req.get(url)
     return r.content
+
+
+def is_logined(uuid):
+    """detect whether user has logined"""
+    url = 'https://login.wx.qq.com/cgi-bin/mmwebwx-bin/login'
+    payload = {
+        'uuid': uuid,
+        'tip': 0,
+        '_': utils.get_timestamp(),
+    }
+    r = _req.get(url, params=payload)
+
+    ptn = re.compile(r'window.redirect_uri="([^"]+)";')
+
+    m = ptn.search(r.text)
+    return m and m.group(1)

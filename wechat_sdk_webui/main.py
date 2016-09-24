@@ -6,6 +6,7 @@ import request
 
 
 def show_qrcode():
+    """step1 of login"""
     uuid = request.get_uuid()
     img_src = request.get_qrcode(uuid)
 
@@ -15,10 +16,24 @@ def show_qrcode():
     image.close()
 
     print '!!! %s' % msg
+    return uuid
+
+
+def waiting4login(uuid):
+    """step2 of login"""
+    while True:
+        print 'waiting...'
+        redirect_uri = request.is_logined(uuid)
+        if redirect_uri:
+            return redirect_uri
 
 
 def main():
-    show_qrcode()
+    uuid = show_qrcode()
+
+    waiting4login(uuid)
+
+    # kill image window
 
 
 if __name__ == '__main__':
