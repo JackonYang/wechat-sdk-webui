@@ -39,18 +39,7 @@ def get_uuid():
     return None
 
 
-def login():
-    uuid = get_uuid()
-
-    print uuid
-
-    if not uuid:
-        return
-
-
-def main():
-    login()
-
-
-if __name__ == '__main__':
-    main()
+def get_qrcode(uuid):
+    url = 'https://login.weixin.qq.com/qrcode/%s' % uuid
+    r = _req.get(url)
+    return r.content
