@@ -19,19 +19,25 @@ def show_qrcode():
     return uuid
 
 
-def waiting4login(uuid):
+def login(uuid):
     """step2 of login"""
+    redirect_uri = None
     while True:
         print 'waiting...'
         redirect_uri = request.is_logined(uuid)
         if redirect_uri:
-            return redirect_uri
+            break
+
+    base_request = request.did_login(redirect_uri)
+    return base_request
 
 
 def main():
     uuid = show_qrcode()
 
-    waiting4login(uuid)
+    base_request = login(uuid)
+
+    print base_request
 
     # kill image window
 

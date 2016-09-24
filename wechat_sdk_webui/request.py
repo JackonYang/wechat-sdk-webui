@@ -4,6 +4,7 @@
 import re
 import requests
 from urllib import quote
+from xml.dom import minidom
 
 import utils
 
@@ -59,3 +60,21 @@ def is_logined(uuid):
 
     m = ptn.search(r.text)
     return m and m.group(1)
+
+
+def did_login(redirect_uri):
+    url = redirect_uri + '&fun=new&version=v2'
+    r = _req.get(url)
+    r.encoding = 200
+    dom = minidom.parseString(r.text)
+    root = dom.documentElement
+
+    params = {n.nodeName: n.firstChild and n.firstChild.nodeValue
+              for n in root.childNodes}
+    base_request = {
+        'Uin': params['wxuin'],
+        'Sid': params['wxsid'],
+        'Skey': params['skey'],
+        'DeviceID': utils.gen_device_id(),
+    }
+    return base_request
