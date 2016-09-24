@@ -32,15 +32,18 @@ def login(uuid):
     return base_request
 
 
+def load_initial_data():
+    print request.wx_init()
+
+
 def main():
     uuid = show_qrcode()
 
-    pass_ticket, base_request = login(uuid)
-
-    print pass_ticket
-    print base_request
+    login(uuid)
 
     # kill image window
+
+    load_initial_data()
 
 
 if __name__ == '__main__':
