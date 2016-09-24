@@ -93,6 +93,7 @@ def wx_init():
     data = r.json()
 
     _db['username'] = data.get('User', dict()).get('UserName')
+    _db['skey'] = data.get('SKey')
     return data
 
 
@@ -113,3 +114,11 @@ def status_notify():
     data = r.json()
 
     return data
+
+
+def get_contactlist():
+    url = 'https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxgetcontact?lang=en_US&r=%s&seq=0&skey=%s' % (utils.get_timestamp(), _db['skey'])
+
+    r = _req.post(url)
+    r.encoding = 'utf-8'
+    return r.json()

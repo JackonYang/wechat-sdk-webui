@@ -1,4 +1,6 @@
 # -*- coding:utf-8 -*-
+import codecs
+import json
 import StringIO
 from PIL import Image
 
@@ -33,8 +35,11 @@ def login(uuid):
 
 
 def load_initial_data():
-    request.wx_init()
+    data = request.wx_init()
     request.status_notify()
+
+    with codecs.open('init_data.json', 'w', 'utf8') as f:
+        f.write(json.dumps(data))
 
 
 def main():
@@ -45,6 +50,11 @@ def main():
     # kill image window
 
     load_initial_data()
+
+    data = request.get_contactlist()
+
+    with codecs.open('contact_list.json', 'w', 'utf8') as f:
+        f.write(json.dumps(data))
 
 
 if __name__ == '__main__':
