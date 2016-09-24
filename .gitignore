@@ -1,0 +1,45 @@
+# .gitignore by jackon.me
+
+dist
+*.log
+
+# Redis
+dump.rdb
+
+
+### python ###
+*.py[cod]
+__pycache__/
+*.so
+pip-log.txt
+
+
+### Node.js ###
+
+# Dependency directories
+node_modules
+jspm_packages
+
+# Optional npm cache directory
+.npm
+
+
+### Vim ###
+.ropeproject
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*~
+
+### Pycharm ###
+.idea/*
+
+
+### Mac ###
+.DS_Store
+
+
+# SVN
+.svn
+
+
+!PLACEHOLDER
