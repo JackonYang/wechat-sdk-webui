@@ -109,8 +109,6 @@ def wx_init():
     _db['skey'] = data.get('SKey')
     _db['sync_key'] = data.get('SyncKey')
 
-    for key, value in _db.items():
-        print key, value
     return data
 
 
@@ -138,4 +136,22 @@ def get_contactlist():
 
     r = _req.post(url)
     r.encoding = 'utf-8'
+    return r.json()
+
+
+def sync():
+    url = 'https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxsync'
+
+    payload = {
+        'sid': _db['sid'],
+        'skey': _db['skey'],
+        'lang': 'en_US',
+    }
+
+    data = json.dumps({
+        'BaseRequest': _db['base_request'],
+        'SyncKey': _db['sync_key'],
+        "rr": utils.get_timestamp(),
+    })
+    r = _req.post(url, params=payload, data=data)
     return r.json()

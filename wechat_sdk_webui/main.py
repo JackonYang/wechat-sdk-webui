@@ -56,6 +56,14 @@ def main():
     with codecs.open('contact_list.json', 'w', 'utf8') as f:
         f.write(json.dumps(data))
 
+    i = 0
+    while True:
+        i += 1
+        data = request.sync()
+
+        with codecs.open('sync_%s.json' % i, 'w', 'utf8') as f:
+            f.write(json.dumps(data))
+
 
 if __name__ == '__main__':
     main()
