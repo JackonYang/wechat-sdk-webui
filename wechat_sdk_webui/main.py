@@ -35,8 +35,9 @@ def login(uuid):
 def main():
     uuid = show_qrcode()
 
-    base_request = login(uuid)
+    pass_ticket, base_request = login(uuid)
 
+    print pass_ticket
     print base_request
 
     # kill image window

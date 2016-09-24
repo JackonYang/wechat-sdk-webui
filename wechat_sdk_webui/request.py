@@ -11,8 +11,6 @@ import utils
 
 # 微信根据 cookie 对用户鉴权
 _req = requests.Session()
-# 缓存自己及好友的 username 等
-_db = dict()
 
 
 def get_uuid():
@@ -77,4 +75,4 @@ def did_login(redirect_uri):
         'Skey': params['skey'],
         'DeviceID': utils.gen_device_id(),
     }
-    return base_request
+    return params.get('pass_ticket'), base_request
