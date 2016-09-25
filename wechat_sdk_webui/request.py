@@ -29,11 +29,12 @@ _db = {
 }
 
 
-def _update_synckeys(Skey, SyncKey, *args, **kwargs):
+def _update_synckeys(SKey, SyncKey, *args, **kwargs):
+    # base_request 里是 Skey, 返回的是 SKey
     # wx_init 时
-    _db['skey'] = Skey
+    _db['skey'] = SKey
     _db['sync_key'] = SyncKey
-    _db['base_request']['Skey'] = Skey
+    _db['base_request']['Skey'] = SKey
 
 
 def get_uuid():
@@ -164,5 +165,7 @@ def sync():
     })
     r = _req.post(url, params=payload, data=data)
     data = r.json()
+
+    _update_synckeys(**data)
 
     return data
