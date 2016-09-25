@@ -15,13 +15,25 @@ _req = requests.Session()
 _db = {
     'uuid': None,
     'pass_ticket': None,
-    'base_request': None,
+    'base_request': {
+        'Uin': None,
+        'Sid': None,
+        'Skey': None,
+        'DeviceID': None,
+    },
     'username': None,
     'uin': None,
     'sid': None,
     'skey': None,
     'sync_key': None,
 }
+
+
+def _update_synckeys(Skey, SyncKey, *args, **kwargs):
+    # wx_init 时
+    _db['skey'] = Skey
+    _db['sync_key'] = SyncKey
+    _db['base_request']['Skey'] = Skey
 
 
 def get_uuid():
@@ -98,17 +110,14 @@ def did_login(redirect_uri):
 
 
 def wx_init():
-    pass_ticket, base_request = _db['pass_ticket'], _db['base_request']
-    url = 'https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxinit?r=%s&lang=en_US&pass_ticket=%s' % (utils.get_timestamp(), pass_ticket)
-    data = {'BaseRequest': base_request}
+    url = 'https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxinit?r=%s&lang=en_US&pass_ticket=%s' % (utils.get_timestamp(), _db['pass_ticket'])
+    data = {'BaseRequest': _db['base_request']}
     r = _req.post(url, data=json.dumps(data))
     r.encoding = 'utf-8'
     data = r.json()
 
+    _update_synckeys(**data)
     _db['username'] = data.get('User', dict()).get('UserName')
-    _db['skey'] = data.get('SKey')
-    _db['sync_key'] = data.get('SyncKey')
-
     return data
 
 
@@ -154,4 +163,6 @@ def sync():
         "rr": utils.get_timestamp(),
     })
     r = _req.post(url, params=payload, data=data)
-    return r.json()
+    data = r.json()
+
+    return data
