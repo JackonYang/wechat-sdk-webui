@@ -2,6 +2,7 @@
 import codecs
 import json
 import StringIO
+import time
 from PIL import Image
 
 import request
@@ -56,13 +57,23 @@ def main():
     with codecs.open('contact_list.json', 'w', 'utf8') as f:
         f.write(json.dumps(data))
 
+    data = []
+
     i = 0
     while True:
-        i += 1
-        data = request.sync()
+        print i
+        res = request.sync()
+        data.append(res)
 
-        with codecs.open('sync_%s.json' % i, 'w', 'utf8') as f:
-            f.write(json.dumps(data))
+        if res['AddMsgCount'] > 0:
+            i += 1
+        else:
+            time.sleep(1)
+
+        if i > 100:
+            with codecs.open('sync_data.json', 'w', 'utf8') as f:
+                f.write(json.dumps(data))
+            break
 
 
 if __name__ == '__main__':
