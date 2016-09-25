@@ -164,6 +164,7 @@ def sync():
         "rr": utils.get_timestamp(),
     })
     r = _req.post(url, params=payload, data=data)
+    r.encoding = 'utf-8'
     data = r.json()
 
     _update_synckeys(**data)
