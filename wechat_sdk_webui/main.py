@@ -61,9 +61,12 @@ def main():
 
     i = 0
     while True:
-        print i
         res = request.sync()
         data.append(res)
+
+        for item in res['AddMsgList']:
+            if item['MsgType'] == 1:
+                print item['Content']
 
         if res['AddMsgCount'] > 0:
             i += 1
